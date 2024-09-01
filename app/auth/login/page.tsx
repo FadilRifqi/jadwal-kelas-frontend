@@ -19,7 +19,7 @@ const LoginPage = () => {
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="md:flex w-full md:w-11/12 h-screen md:h-[85vh] rounded-l-xl rounded-xl shadow-xl bg-white">
+      <div className="md:flex w-full md:w-4/5 h-screen md:h-[85vh] rounded-l-xl rounded-xl shadow-xl bg-white">
         <div className="relative w-full md:w-1/3 h-full p-8 hidden md:flex items-center justify-center">
           <Image
             src={login}
@@ -80,7 +80,7 @@ const LoginPage = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+              className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-500 active:bg-blue-300"
             >
               Login
             </button>
