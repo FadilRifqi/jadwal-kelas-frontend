@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import login from "@/images/login.jpg";
+import loginImage from "@/images/login.jpg";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { route } from "@/utils/route";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +15,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,27 +23,25 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed");
       }
 
       const data = await response.json();
       console.log("Login successful:", data);
-      // Handle successful login (e.g., redirect, store token, etc.)
-    } catch (error) {
-      setError("Login failed. Please check your credentials and try again.");
-      console.error("Error during login:", error);
+      // Handle successful login (e.g., redirect, show success message, etc.)
+      router.push(route("home"));
+    } catch (error: any) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ const LoginPage = () => {
       >
         <div className="relative w-full md:w-1/3 h-full p-8 hidden md:flex items-center justify-center">
           <Image
-            src={login}
+            src={loginImage}
             alt="login"
             layout="intrinsic"
             objectFit="cover"
@@ -66,7 +66,7 @@ const LoginPage = () => {
         </div>
         <div
           className="w-full md:w-2/3 h-full p-8 flex flex-col justify-center rounded-r-xl md:bg-blue-200 bg-cover bg-center mobile-bg-only"
-          style={{ backgroundImage: `url(${login.src})` }}
+          style={{ backgroundImage: `url(${loginImage.src})` }}
         >
           <h2 className="text-2xl font-bold mb-4">Login</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
