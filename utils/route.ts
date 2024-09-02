@@ -1,7 +1,7 @@
 const routes = {
-  login: "/auth/login",
-  register: "/auth/register",
-  resetPassword: "/auth/reset-password",
+  login: "/login",
+  register: "/register",
+  resetPassword: "/reset-password",
   // Add other routes here
 };
 

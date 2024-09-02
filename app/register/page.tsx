@@ -6,6 +6,7 @@ import Link from "next/link";
 import { route } from "@/utils/route";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 const Registerpage = () => {
   const [firstName, setFirstName] = useState("");
@@ -14,14 +15,52 @@ const Registerpage = () => {
   const [password, setPassword] = useState("");
   const [isAgree, setIsAgree] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ firstName, lastName, email, password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+      console.log("Registration successful:", data);
+      // Handle successful registration (e.g., redirect, show success message, etc.)
+    } catch (error: any) {
+      setError(
+        error.message ||
+          "Registration failed. Please check your details and try again."
+      );
+      console.error("Error during registration:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="md:flex w-full md:w-4/5 h-[85vh] rounded-r-xl rounded-xl shadow-xl bg-white">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="md:flex w-full md:w-4/5 h-[85vh] rounded-r-xl rounded-xl shadow-xl bg-white"
+      >
         <div
           className="w-full md:w-2/3 h-full p-8 flex flex-col justify-center rounded-r-xl md:bg-blue-200 bg-cover bg-center mobile-bg-only"
           style={{ backgroundImage: `url(${login.src})` }}
@@ -128,11 +167,13 @@ const Registerpage = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-500 active:bg-blue-300"
+              className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-500 active:bg-blue-300 disabled:bg-blue-300"
+              disabled={loading}
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </button>
           </form>
+          {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
           <p className="mt-4 text-sm text-center">
             Already have an account?{" "}
             <Link href={route("login")} className="text-blue-600 underline">
@@ -149,7 +190,7 @@ const Registerpage = () => {
             className="rounded-xl"
           />
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

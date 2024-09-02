@@ -6,6 +6,7 @@ import Link from "next/link";
 import { route } from "@/utils/route";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -16,10 +17,44 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await response.json();
+      console.log("Login successful:", data);
+      // Handle successful login (e.g., redirect, store token, etc.)
+    } catch (error) {
+      setError("Login failed. Please check your credentials and try again.");
+      console.error("Error during login:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="md:flex w-full md:w-4/5 h-screen md:h-[85vh] rounded-l-xl rounded-xl shadow-xl bg-white">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="md:flex w-full md:w-4/5 h-screen md:h-[85vh] rounded-l-xl rounded-xl shadow-xl bg-white"
+      >
         <div className="relative w-full md:w-1/3 h-full p-8 hidden md:flex items-center justify-center">
           <Image
             src={login}
@@ -79,8 +114,9 @@ const LoginPage = () => {
               </div>
             </div>
             <button
+              disabled={loading}
               type="submit"
-              className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-500 active:bg-blue-300"
+              className="w-full py-2 px-4 bg-blue-400 text-white font-semibold rounded-md hover:bg-blue-500 active:bg-blue-300 disabled:bg-blue-300"
             >
               Login
             </button>
@@ -99,7 +135,7 @@ const LoginPage = () => {
             </Link>
           </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
