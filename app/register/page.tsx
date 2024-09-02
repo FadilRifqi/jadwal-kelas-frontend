@@ -59,10 +59,10 @@ const Registerpage = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="md:flex w-full md:w-4/5 h-[85vh] rounded-r-xl rounded-xl shadow-xl bg-white"
+        className="md:flex w-full md:w-4/5 h-[85vh] rounded-xl shadow-xl bg-white"
       >
         <div
-          className="w-full md:w-2/3 h-full p-8 flex flex-col justify-center rounded-r-xl md:bg-blue-200 bg-cover bg-center mobile-bg-only"
+          className="w-full md:w-2/3 h-full p-8 flex flex-col justify-center rounded-l-xl md:bg-blue-200 bg-cover bg-center mobile-bg-only"
           style={{ backgroundImage: `url(${login.src})` }}
         >
           <h2 className="text-2xl font-bold mb-4">Register</h2>

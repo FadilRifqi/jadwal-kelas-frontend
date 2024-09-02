@@ -53,7 +53,7 @@ const LoginPage = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="md:flex w-full md:w-4/5 h-screen md:h-[85vh] rounded-l-xl rounded-xl shadow-xl bg-white"
+        className="md:flex w-full md:w-4/5 h-screen md:h-[85vh] rounded-xl shadow-xl bg-white"
       >
         <div className="relative w-full md:w-1/3 h-full p-8 hidden md:flex items-center justify-center">
           <Image
