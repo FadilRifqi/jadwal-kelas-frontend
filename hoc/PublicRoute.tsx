@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { auth } from "@/lib/session";
 import { UserInterface } from "@/interfaces/userInterface";
 
-const WithAuth = (WrappedComponent: React.ComponentType) => {
+const PublicRoute = (WrappedComponent: React.ComponentType) => {
   const ComponentWithAuth = (props: any) => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
@@ -38,4 +38,4 @@ const WithAuth = (WrappedComponent: React.ComponentType) => {
   return ComponentWithAuth;
 };
 
-export default WithAuth;
+export default PublicRoute;

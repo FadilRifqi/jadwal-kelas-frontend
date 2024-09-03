@@ -1,11 +1,16 @@
-import { ReactNode } from "react";
-import Navbar from "./Navbar";
+import Navbar from "@/components/Navbar";
+import { UserInterface } from "@/interfaces/userInterface";
 
-const Layout = ({ children }: { children: ReactNode }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+  session?: UserInterface;
+}
+
+const Layout = ({ children, session }: LayoutProps) => {
   return (
     <div>
-      <Navbar />
-      {children}
+      <Navbar session={session} />
+      <main>{children}</main>
     </div>
   );
 };

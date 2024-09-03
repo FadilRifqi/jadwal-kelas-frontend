@@ -27,7 +27,7 @@ const LoginPage = () => {
     try {
       await login(email, password);
       // Handle successful login (e.g., redirect, show success message, etc.)
-      router.push(route("home"));
+      router.push(route("dashboard"));
     } catch (error: any) {
       console.log("Login failed:", error);
 

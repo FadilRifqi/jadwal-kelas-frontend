@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/session";
 import { UserInterface } from "@/interfaces/userInterface";
+import { route } from "@/utils/route";
 
 const WithAuth = (WrappedComponent: React.ComponentType) => {
   const ComponentWithAuth = (props: any) => {
@@ -16,7 +17,7 @@ const WithAuth = (WrappedComponent: React.ComponentType) => {
           const sessionData = await auth();
 
           if (!sessionData) {
-            router.push("/login");
+            router.push(route("login"));
           } else {
             setSession(sessionData); // Save session data
             setLoading(false);

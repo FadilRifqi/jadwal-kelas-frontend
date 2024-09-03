@@ -12,7 +12,7 @@ const secret = new TextEncoder().encode(SECRET_KEY);
 export async function auth(): Promise<any> {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
   if (!accessToken) {
-    throw new Error("No access token found");
+    return null;
   }
   try {
     const { payload } = await jwtVerify(accessToken, secret);
@@ -20,11 +20,11 @@ export async function auth(): Promise<any> {
   } catch (error) {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
     if (!refreshToken) {
-      throw new Error("No refresh token found");
+      return null;
     }
     const newAccessToken = await refresh(refreshToken);
     if (!newAccessToken) {
-      throw new Error("Failed to refresh token");
+      return null;
     }
     localStorage.setItem(ACCESS_TOKEN, newAccessToken);
   }
@@ -44,7 +44,6 @@ export async function refresh(refreshToken: string) {
 
   if (!response.ok) {
     console.log("response", await response.json());
-
     return null;
   }
 
@@ -71,4 +70,10 @@ export async function login(email: string, password: string): Promise<any> {
 
   localStorage.setItem(ACCESS_TOKEN, data.accessToken);
   localStorage.setItem(REFRESH_TOKEN, data.refreshToken);
+}
+
+export async function logout() {
+  localStorage.removeItem(ACCESS_TOKEN);
+  localStorage.removeItem(REFRESH_TOKEN);
+  window.location.reload();
 }
