@@ -7,6 +7,7 @@ import { route } from "@/utils/route";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import WithoutAuth from "@/hoc/WithoutAuth";
 
 const Registerpage = () => {
   const [firstName, setFirstName] = useState("");
@@ -195,4 +196,4 @@ const Registerpage = () => {
   );
 };
 
-export default Registerpage;
+export default WithoutAuth(Registerpage);

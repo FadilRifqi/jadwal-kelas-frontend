@@ -8,6 +8,8 @@ import { route } from "@/utils/route";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import { login } from "@/lib/session";
+import WithoutAuth from "@/hoc/WithoutAuth";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -23,24 +25,12 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
-      }
-
-      const data = await response.json();
-      console.log("Login successful:", data);
+      await login(email, password);
       // Handle successful login (e.g., redirect, show success message, etc.)
       router.push(route("home"));
     } catch (error: any) {
+      console.log("Login failed:", error);
+
       setError(error.message);
     } finally {
       setLoading(false);
@@ -140,4 +130,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default WithoutAuth(LoginPage);
