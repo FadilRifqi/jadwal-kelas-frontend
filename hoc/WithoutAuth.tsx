@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { auth } from "@/lib/session";
 import { UserInterface } from "@/interfaces/userInterface";
 import { route } from "@/utils/route";
+import Loading from "@/components/Loading";
 
 const WithoutAuth = (WrappedComponent: React.ComponentType) => {
   const ComponentWithAuth = (props: any) => {
@@ -30,7 +31,7 @@ const WithoutAuth = (WrappedComponent: React.ComponentType) => {
     }, [router]);
 
     if (loading) {
-      return <div>loading ...</div>; // Show loading indicator while checking authentication
+      return <Loading />; // Show loading indicator while checking authentication
     }
 
     return <WrappedComponent {...props} />;

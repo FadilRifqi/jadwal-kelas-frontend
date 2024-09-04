@@ -9,6 +9,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        "bounce-fast": "bounce 0.4s infinite",
+      },
+      keyframes: {
+        bounce: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-50%)" },
+        },
+      },
       fontFamily: {
         sans: ['"Bebas Neue"', "sans-serif"],
       },

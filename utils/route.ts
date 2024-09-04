@@ -1,6 +1,8 @@
 const routes = {
   home: "/",
   dashboard: "/dashboard",
+  settings: "/account/settings",
+  verifyEmail: "/verify-email",
   login: "/login",
   register: "/register",
   resetPassword: "/reset-password",

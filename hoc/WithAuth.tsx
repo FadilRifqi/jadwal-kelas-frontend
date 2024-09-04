@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { auth } from "@/lib/session";
 import { UserInterface } from "@/interfaces/userInterface";
 import { route } from "@/utils/route";
+import Loading from "@/components/Loading";
 
 const WithAuth = (WrappedComponent: React.ComponentType) => {
   const ComponentWithAuth = (props: any) => {
@@ -19,6 +20,15 @@ const WithAuth = (WrappedComponent: React.ComponentType) => {
           if (!sessionData) {
             router.push(route("login"));
           } else {
+            const currentPath = window.location.pathname;
+            if (
+              sessionData.isEmailConfirmed === false &&
+              currentPath !== route("verifyEmail")
+            ) {
+              router.push(route("verifyEmail"));
+              // return so dashboard page is not rendered
+              return;
+            }
             setSession(sessionData); // Save session data
             setLoading(false);
           }
@@ -30,7 +40,7 @@ const WithAuth = (WrappedComponent: React.ComponentType) => {
     }, [router]);
 
     if (loading) {
-      return <div>loading ...</div>; // Show loading indicator while checking authentication
+      return <Loading />; // Show loading indicator while checking authentication
     }
 
     return <WrappedComponent {...props} session={session} />; // Pass session data as a prop

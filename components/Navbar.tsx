@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { UserInterface } from "@/interfaces/userInterface";
 import Link from "next/link";
 import { logout } from "@/lib/session";
+import { route } from "@/utils/route";
 
 interface NavbarProps {
   session?: UserInterface;
@@ -18,16 +19,29 @@ const Navbar = ({ session }: NavbarProps) => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add("dark");
+    // Check localStorage for dark mode preference
+    const storedDarkMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(storedDarkMode);
+    if (storedDarkMode) {
+      document.documentElement.classList.add("dark");
     } else {
-      root.classList.remove("dark");
+      document.documentElement.classList.remove("dark");
     }
-  }, [darkMode]);
+  }, []);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    setDarkMode((prevDarkMode) => {
+      const newDarkMode = !prevDarkMode;
+      // Update the class on the document root
+      if (newDarkMode) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      // Store dark mode preference in localStorage
+      localStorage.setItem("darkMode", newDarkMode.toString());
+      return newDarkMode;
+    });
   };
 
   const handleLogout = async () => {
@@ -43,40 +57,28 @@ const Navbar = ({ session }: NavbarProps) => {
           <div className="flex items-center gap-16 my-12">
             {/* logo */}
             <div>
-              <a
+              <Link
                 href="/"
                 className="flex gap-1 font-bold text-gray-700 dark:text-gray-300 items-center"
               >
                 <PaperAirplaneIcon className="h-6 w-6 text-primary transition-colors duration-500" />
-                <span>Paper.io</span>
-              </a>
+                <span>PlanStream.io</span>
+              </Link>
             </div>
             {/* primary */}
             <div className="hidden lg:flex gap-8">
-              <a
-                href="#"
+              <Link
+                href={route("dashboard")}
                 className="text-gray-700 dark:text-gray-300 transition-colors duration-500"
               >
-                Home
-              </a>
-              <a
-                href="#"
+                Dashboard
+              </Link>
+              <Link
+                href={route("settings")}
                 className="text-gray-700 dark:text-gray-300 transition-colors duration-500"
               >
-                Benefits
-              </a>
-              <a
-                href="#"
-                className="text-gray-700 dark:text-gray-300 transition-colors duration-500"
-              >
-                Our Classes
-              </a>
-              <a
-                href="#"
-                className="text-gray-700 dark:text-gray-300 transition-colors duration-500"
-              >
-                Contact Us
-              </a>
+                Settings
+              </Link>
             </div>
           </div>
           {/* secondary */}
@@ -99,9 +101,9 @@ const Navbar = ({ session }: NavbarProps) => {
                     }`}
                   >
                     {darkMode ? (
-                      <SunIcon className="h-6 w-6 text-yellow-500" />
+                      <MoonIcon className="h-6 w-6 text-white" />
                     ) : (
-                      <MoonIcon className="h-6 w-6 text-gray-700" />
+                      <SunIcon className="h-6 w-6 text-yellow-500" />
                     )}
                   </div>
                 </button>
@@ -110,14 +112,14 @@ const Navbar = ({ session }: NavbarProps) => {
                 {session ? (
                   <button
                     onClick={handleLogout}
-                    className="rounded-full border-solid border-2 border-gray-300 py-2 px-4 hover:bg-gray-700 hover:text-gray-100 transition-colors duration-300"
+                    className="rounded-full text-gray-100 bg-red-500 hover:bg-red-600 border-solid border-2 border-gray-300 py-2 px-4 transition-colors duration-300"
                   >
                     Logout
                   </button>
                 ) : (
                   <Link
                     href="/login"
-                    className="rounded-full border-solid border-2 border-gray-300 py-2 px-4 hover:bg-gray-700 hover:text-gray-100 transition-colors duration-300"
+                    className="rounded-full bg-gray-500  border-solid border-2 border-gray-300 py-2 px-4 hover:bg-gray-600 text-gray-100 transition-colors duration-300"
                   >
                     Login
                   </Link>
@@ -141,30 +143,30 @@ const Navbar = ({ session }: NavbarProps) => {
       >
         <div className="px-8">
           <div className="flex flex-col gap-8 font-bold tracking-wider">
-            <a
+            <Link
               href="#"
               className="border-l-4 border-gray-600 dark:border-gray-300 transition-colors duration-500"
             >
               Features
-            </a>
-            <a
+            </Link>
+            <Link
               href="#"
               className="text-gray-700 dark:text-gray-300 transition-colors duration-500"
             >
               Pricing
-            </a>
-            <a
+            </Link>
+            <Link
               href="#"
               className="text-gray-700 dark:text-gray-300 transition-colors duration-500"
             >
               Download
-            </a>
-            <a
+            </Link>
+            <Link
               href="#"
               className="text-gray-700 dark:text-gray-300 transition-colors duration-500"
             >
               Classic
-            </a>
+            </Link>
             {/* Dark Mode Toggle for Mobile */}
             <div
               className={`flex w-[2.4rem] border-2 border-gray-700 dark:border-white items-center rounded-md transition-colors duration-500 ${

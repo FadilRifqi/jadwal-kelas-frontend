@@ -72,6 +72,28 @@ export async function login(email: string, password: string): Promise<any> {
   localStorage.setItem(REFRESH_TOKEN, data.refreshToken);
 }
 
+export async function getToken() {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+  if (!accessToken) {
+    return null;
+  }
+  try {
+    const { payload } = await jwtVerify(accessToken, secret);
+    return accessToken;
+  } catch (error) {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    if (!refreshToken) {
+      return null;
+    }
+    const newAccessToken = await refresh(refreshToken);
+    if (!newAccessToken) {
+      return null;
+    }
+    localStorage.setItem(ACCESS_TOKEN, newAccessToken);
+    return newAccessToken;
+  }
+}
+
 export async function logout() {
   localStorage.removeItem(ACCESS_TOKEN);
   localStorage.removeItem(REFRESH_TOKEN);

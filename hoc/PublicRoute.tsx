@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/session";
 import { UserInterface } from "@/interfaces/userInterface";
+import Loading from "@/components/Loading";
 
 const PublicRoute = (WrappedComponent: React.ComponentType) => {
   const ComponentWithAuth = (props: any) => {
@@ -24,7 +25,7 @@ const PublicRoute = (WrappedComponent: React.ComponentType) => {
     }, [router]);
 
     if (loading) {
-      return <div>loading ...</div>; // Show loading indicator while checking authentication
+      return <Loading />; // Show loading indicator while checking authentication
     }
 
     return <WrappedComponent {...props} session={session} />; // Pass session data as a prop
