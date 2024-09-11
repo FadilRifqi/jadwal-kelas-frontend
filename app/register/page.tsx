@@ -32,7 +32,12 @@ const Registerpage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ firstName, lastName, email, password }),
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            password,
+          }),
         }
       );
 
